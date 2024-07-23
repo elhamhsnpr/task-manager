@@ -58,12 +58,11 @@ app.patch('/users/:id', async (req, res) => {
     const _id = req.params.id
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'email', 'password', 'age']
-    const isValidOperation = updates.every((update) => { allowedUpdates.includes(update) })
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
         return res.status(400).send('Error : Invalid updates!')
     }
-
 
     try {
         const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true })
@@ -122,6 +121,27 @@ app.get('/tasks/:id', async (req, res) => {
 
     } catch (e) {
         res.status(500).send()
+    }
+
+})
+
+//Update Task by ID
+app.patch('/tasks/:id', async (req, res) => {
+    const _id = req.params.id
+    const updates = Object.keys(req.body)
+    const allowedUpdatess = ['description', 'completed']
+    const isValidOperation = updates.every((update) => allowedUpdatess.includes(update))
+
+
+    if (!isValidOperation) {
+        return res.status(400).send("Error: Invalid updates!")
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true })
+        res.send(task)
+    } catch (e) {
+        res.status(500).send(e)
     }
 
 })
