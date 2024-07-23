@@ -61,7 +61,7 @@ app.patch('/users/:id', async (req, res) => {
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
-        return res.status(400).send('Error : Invalid updates!')
+        return res.status(400).send({ erro: 'Invalid updates!' })
     }
 
     try {
@@ -76,6 +76,25 @@ app.patch('/users/:id', async (req, res) => {
     } catch (e) {
         res.status(500).send(e)
     }
+})
+
+//Delete User by ID
+app.delete('/users/:id', async (req, res) => {
+
+    try {
+        const user = await User.findByIdAndDelete(req.params.id)
+
+        if (!user) {
+            return res.status(404).send()
+        }
+
+        res.send(user)
+
+    } catch (e) {
+        res.status(500).send(e)
+    }
+
+
 })
 
 //Create Task
@@ -134,12 +153,12 @@ app.patch('/tasks/:id', async (req, res) => {
 
 
     if (!isValidOperation) {
-        return res.status(400).send("Error: Invalid updates!")
+        return res.status(400).send({ error: 'Invalid updates!' })
     }
 
     try {
         const task = await Task.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true })
-        
+
         if (!task) {
             return res.status(404).send()
         }
