@@ -21,11 +21,11 @@ router.post('/tasks', auth, async (req, res) => {
 
 })
 
-//Get Tasks
+//Read Tasks
 router.get('/tasks', auth, async (req, res) => {
 
     try {
-    
+
         await req.user.populate('tasks')
         res.send(req.user.tasks)
 
@@ -35,7 +35,7 @@ router.get('/tasks', auth, async (req, res) => {
 
 })
 
-//Get Task by ID
+//Read Task by ID
 router.get('/tasks/:id', auth, async (req, res) => {
 
     const _id = req.params.id
@@ -56,7 +56,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
 })
 
 //Update Task by ID
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id
     const updates = Object.keys(req.body)
     const allowedUpdatess = ['description', 'completed']
@@ -69,14 +69,14 @@ router.patch('/tasks/:id', async (req, res) => {
 
     try {
 
-        const task = await Task.findById(_id)
-
-        updates.forEach((update) => task[update] = req.body[update])
-        await task.save()
+        const task = await Task.findOne({ _id, owner: req.user._id })
 
         if (!task) {
             return res.status(404).send()
         }
+
+        updates.forEach((update) => task[update] = req.body[update])
+        await task.save()
 
         res.send(task)
     } catch (e) {
