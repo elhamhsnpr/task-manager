@@ -67,7 +67,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 //Read Profile
 router.get('/users/me', auth, async (req, res) => {
 
-    res.send({ user: req.user, token: req.token })
+    res.send({ user: req.user })
 
 })
 
