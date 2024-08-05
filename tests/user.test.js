@@ -120,3 +120,28 @@ test('Should upload avatar image', async () => {
     expect(user.avatar).toEqual(expect.any(Buffer))
 
 })
+
+test('Should update valid user fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            name: 'Osveh H'
+        })
+        .expect(200)
+
+    //Assert that database was changed correctly
+    const user = await User.findById(userOneId)
+    expect(user.name).toBe('Osveh H')
+
+})
+
+test('Should not update invalid user fields', async () => {
+    await request(app)
+        .patch('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send({
+            location: 'Berlin'
+        })
+        .expect(400)
+})
