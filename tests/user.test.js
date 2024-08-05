@@ -89,12 +89,16 @@ test('Should not get profile for unauthorized user', async () => {
         .expect(401)
 })
 
-test('Should delete  account for user', async () => {
+test('Should delete account for user', async () => {
     await request(app)
         .delete('/users/me')
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
         .send()
         .expect(200)
+
+    //Assert to user account is deleted
+    const user = await User.findById(userOneId)
+    expect(user).toBeNull()
 })
 
 test('Should not detele account for unauthorized user', async () => {
