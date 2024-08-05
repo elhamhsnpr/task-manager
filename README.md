@@ -78,6 +78,19 @@ The Task Manager Project is a backend application built with Node.js and Express
 ### Task Routes
 - **Create Task for Authenticated User**: `POST /tasks`
 - **Read All Tasks for Authenticated User**: `GET /tasks`
+  - **Example Requests**:
+    - Retrieve tasks that are completed:
+      ```http
+      GET /tasks?completed=true
+      ```
+    - Retrieve a paginated list of tasks (10 tasks per page, skip the first 20):
+      ```http
+      GET /tasks?limit=10&skip=20
+      ```
+    - Retrieve tasks sorted by creation date in descending order:
+      ```http
+      GET /tasks?sortBy=createdAt:desc
+      ```
 - **Read Specific Task for Authenticated User**: `GET /tasks/:id`
 - **Update Specific Task for Authenticated User**: `PATCH /tasks/:id`
 - **Delete Specific Task for Authenticated User**: `DELETE /tasks/:id`
