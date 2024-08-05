@@ -58,7 +58,7 @@ test('Should login existing user', async () => {
         })
         .expect(200)
 
-    //Assert that new token is saved
+    //Assert that new token was saved
     const user = await User.findById(userOne._id)
     expect(user.tokens[1].token).toBe(response.body.token)
 
@@ -96,7 +96,7 @@ test('Should delete account for user', async () => {
         .send()
         .expect(200)
 
-    //Assert to user account is deleted
+    //Assert to user account was deleted
     const user = await User.findById(userOneId)
     expect(user).toBeNull()
 })
@@ -106,4 +106,17 @@ test('Should not detele account for unauthorized user', async () => {
         .delete('/users/me')
         .send()
         .expect(401)
+})
+
+test('Should upload avatar image', async () => {
+    await request(app)
+        .post('/users/me/avatar')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .attach('avatar', 'tests/fixtures/profile-pic.jpg')
+        .expect(200)
+
+    //Assert that avatar image was uploaded
+    const user = await User.findById(userOneId)
+    expect(user.avatar).toEqual(expect.any(Buffer))
+
 })
