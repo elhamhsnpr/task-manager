@@ -22,7 +22,8 @@ beforeEach(async () => {
 
 
 test('Should signup a new user', async () => {
-    await request(app).post('/users')
+    await request(app)
+        .post('/users')
         .send({
             name: 'Elham',
             email: 'elham@gmail.com',
@@ -32,7 +33,8 @@ test('Should signup a new user', async () => {
 })
 
 test('Should login existing user', async () => {
-    await request(app).post('/users/login')
+    await request(app)
+        .post('/users/login')
         .send({
             email: userOne.email,
             password: userOne.password
@@ -41,7 +43,8 @@ test('Should login existing user', async () => {
 })
 
 test('Should not login nonexistent uer', async () => {
-    await request(app).post('/users/login')
+    await request(app)
+        .post('/users/login')
         .send({
             email: userOne.email,
             password: 'test12345'
@@ -50,14 +53,31 @@ test('Should not login nonexistent uer', async () => {
 })
 
 test('Should get profile for user', async () => {
-    await request(app).get('/users/me')
+    await request(app)
+        .get('/users/me')
         .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
-        .send({})
+        .send()
         .expect(200)
 })
 
 test('Should not get profile for unauthorized user', async () => {
-    await request(app).get('/users/me')
-        .send({})
+    await request(app)
+        .get('/users/me')
+        .send()
+        .expect(401)
+})
+
+test('Should delete  account for user', async () => {
+    await request(app)
+        .delete('/users/me')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+})
+
+test('Should not detele account for unauthorized user', async () => {
+    await request(app)
+        .delete('/users/me')
+        .send()
         .expect(401)
 })
