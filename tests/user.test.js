@@ -50,13 +50,18 @@ test('Should signup a new user', async () => {
 })
 
 test('Should login existing user', async () => {
-    await request(app)
+    const response = await request(app)
         .post('/users/login')
         .send({
             email: userOne.email,
             password: userOne.password
         })
         .expect(200)
+
+    //Assert that new token is saved
+    const user = await User.findById(userOne._id)
+    expect(user.tokens[1].token).toBe(response.body.token)
+
 })
 
 test('Should not login nonexistent uer', async () => {
