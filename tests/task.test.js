@@ -21,3 +21,14 @@ test('Should create task for user', async () => {
 
 
 })
+
+test('Should fetch user tasks', async () => {
+    const response = await request(app)
+        .get('/tasks')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+
+    //Assertion about the response
+    expect(response.body.length).toEqual(2)
+})
