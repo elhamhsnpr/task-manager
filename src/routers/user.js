@@ -5,7 +5,7 @@ const User = require('../models/user')
 const auth = require('../middleware/auth')
 const router = new express.Router()
 
-//Creat User
+//Create User
 router.post('/users', async (req, res) => {
 
     const user = new User(req.body)
@@ -37,7 +37,7 @@ router.post('/users/login', async (req, res) => {
 
 })
 
-//Logout user
+//Logout User
 router.post('/users/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
@@ -53,7 +53,7 @@ router.post('/users/logout', auth, async (req, res) => {
 
 })
 
-//LogoutAll user
+//Logout All Sessions
 router.post('/users/logoutAll', auth, async (req, res) => {
     try {
 
@@ -110,7 +110,7 @@ router.delete('/users/me', auth, async (req, res) => {
 
 })
 
-//Upoad Profile Avatar
+//Upload Profile Avatar
 const upload = multer({
     limits: {
         fileSize: 1000000

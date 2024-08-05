@@ -14,7 +14,7 @@ test('Should create task for user', async () => {
         })
         .expect(201)
 
-    //Asser that the task was created
+    //Assert that the task was created
     const task = await Task.findById(response.body._id)
     expect(task).not.toBeNull()
     expect(task.completed).toEqual(false)
